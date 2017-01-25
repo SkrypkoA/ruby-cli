@@ -1,7 +1,7 @@
 require "spec_helper"
 
 RSpec.describe "Drkmen CLI" do
-  let(:exe) { File.expand_path('../../bin/drkmen', __FILE__) }
+  let(:exe) { File.expand_path('../../bin/thor_main.rb', __FILE__) }
 
   describe "new" do
     let(:cmd) { "#{exe} new" }
@@ -28,7 +28,6 @@ RSpec.describe "Drkmen CLI" do
         expect(p).to have_output("Title: ")
         p.type("My Title")
         code = p.output[/Starting with new property ([A-Z1-9]+)\./, 1]
-
         p.kill("INT")
         p.wait
       end

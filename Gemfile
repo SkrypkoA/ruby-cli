@@ -1,3 +1,11 @@
 source 'https://rubygems.org'
 
-gem "rspec"
+group :test do
+  gem "rspec"
+end
+
+gem 'sqlite3'
+
+gem 'thor'
+
+gem 'highline'

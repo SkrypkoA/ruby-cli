@@ -23,25 +23,15 @@ class ThorRubyCli < Thor
   desc "new" ,"new"
   def new
     property = Property.new(id: SecureRandom.hex(10).to_s.upcase!)
-    cli = HighLine.new
     puts "Starting with new property #{property.id}."
-    validate_hash = Property.validate_hash
-    property.instance_variables.each do |var|
-      property.instance_variable_set(var, cli.ask(Property.question(var)) { |q| q.validate = validate_hash[var] }) unless var == :@id
-      property.save
-    end
+    input_params(property)
   end
 
   desc "continue" ,"continue"
   def continue(prop_id)
-    cli = HighLine.new
     property = Property.find(prop_id)
-    validate_hash = Property.validate_hash
     puts "Continuing with property #{property.id}"
-    property.instance_variables.each do |var|
-      property.instance_variable_set(var, cli.ask(Property.question(var)) { |q| q.validate = validate_hash[var] }) if property.instance_variable_get(var).empty?
-      property.save
-    end
+    input_params(property)
     puts "Great job! Listing #{property.id} is complete!"
   end
 
@@ -51,6 +41,19 @@ class ThorRubyCli < Thor
     puts "No properties found." if props.to_a.empty?
     props.each do |prop|
       puts "#{prop['Id']} : #{prop['Title']}"
+    end
+  end
+
+  private
+
+  def input_params(property)
+    cli = HighLine.new
+    validate_hash = Property.validate_hash
+    property.instance_variables.each do |var|
+      if property.instance_variable_get(var).nil? || property.instance_variable_get(var).to_s.empty?
+        property.instance_variable_set(var, cli.ask(Property.question(var)) { |q| q.validate = validate_hash[var] })
+        property.save
+      end
     end
   end
 end

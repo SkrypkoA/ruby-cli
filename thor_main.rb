@@ -22,7 +22,7 @@ end
 class ThorRubyCli < Thor
   desc "new" ,"new"
   def new
-    property = Property.new(id: SecureRandom.hex(2).to_s)
+    property = Property.new(id: SecureRandom.hex(3).to_s.upcase!)
     cli = HighLine.new
     puts "Starting with new property #{property.id}."
     property.title = cli.ask("Title: ") { |q| q.validate = Property::EMPTY_REGEXP }

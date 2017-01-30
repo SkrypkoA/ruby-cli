@@ -26,15 +26,14 @@ RSpec.describe "Drkmen CLI" do
 
       CliProcess.new("#{exe} new").tap do |p|
         expect(p).to have_output("Title: ")
-        p.type("My Title")
-        code = p.output[/Starting with new property ([A-Z1-9]+)\./, 1]
-        puts "############ #{code}"
+        p.type("My ----")
+        code = p.output[/Starting with new property ([A-Z0-9]+)\./, 1]
+        expect(p).to have_output("Address: ")
         p.kill("INT")
         p.wait
       end
 
       CliProcess.new("#{exe} continue #{code}").tap do |p|
-        puts "############ #{code}"
         expect(p).to have_output("Continuing with property #{code}")
         # FIXME: Please extend!
       end

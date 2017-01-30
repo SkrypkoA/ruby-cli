@@ -30,6 +30,7 @@ class ThorRubyCli < Thor
   desc "continue" ,"continue"
   def continue(prop_id)
     property = Property.find(prop_id)
+    return if property.nil?
     puts "Continuing with property #{property.id}"
     input_params(property)
     puts "Great job! Listing #{property.id} is complete!"

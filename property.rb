@@ -58,7 +58,7 @@ class Property
     property = $db.execute "SELECT * FROM Properties WHERE Id = '#{id}'"
 
     if property.to_a.empty?
-      #puts "No properties found."
+      puts "No properties found."
       return
     else
       Property.new({id: property[0]['Id'],

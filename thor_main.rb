@@ -22,14 +22,14 @@ end
 class ThorRubyCli < Thor
   desc "new" ,"new"
   def new
-    property = Property.new(id: SecureRandom.hex(3).to_s.upcase!)
+    property = Property.new(id: SecureRandom.hex(10).to_s.upcase!)
     cli = HighLine.new
     puts "Starting with new property #{property.id}."
-    property.title = cli.ask("Title: ") { |q| q.validate = Property::EMPTY_REGEXP }
-    property.save
-    property.address = cli.ask("Address: ") { |q| q.validate = Property::EMPTY_REGEXP }
-    property.save
-
+    validate_hash = Property.validate_hash
+    property.instance_variables.each do |var|
+      property.instance_variable_set(var, cli.ask(Property.question(var)) { |q| q.validate = validate_hash[var] }) unless var == :@id
+      property.save
+    end
   end
 
   desc "continue" ,"continue"
@@ -39,7 +39,7 @@ class ThorRubyCli < Thor
     validate_hash = Property.validate_hash
     puts "Continuing with property #{property.id}"
     property.instance_variables.each do |var|
-      property.instance_variable_set(var, cli.ask(Property.question(var)) { |q| q.validate = validate_hash[var] }) unless var == :@id
+      property.instance_variable_set(var, cli.ask(Property.question(var)) { |q| q.validate = validate_hash[var] }) if property.instance_variable_get(var).empty?
       property.save
     end
     puts "Great job! Listing #{property.id} is complete!"

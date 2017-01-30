@@ -49,7 +49,7 @@ class Property
   end
 
   def self.list
-    props = $db.execute "SELECT * FROM Properties WHERE  Email is not null"
+    props = $db.execute "SELECT * FROM Properties WHERE Phone_number != ''"
     puts "No properties found." if props.to_a.empty?
     props
   end

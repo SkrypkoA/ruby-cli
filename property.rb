@@ -73,7 +73,7 @@ class Property
   end
 
   def self.question(attr)
-    attr.to_s.sub('@','').capitalize + ":"
+    attr.to_s.sub('@','').capitalize + ": "
   end
 
   def self.validate_hash
